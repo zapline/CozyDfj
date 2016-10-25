@@ -12,7 +12,7 @@ public class GameController : MonoBehaviour
 
     IEnumerator enemyGenerator()
     {
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(1);
         while (true)
         {
             for (int i = 0; i < 5; i++)
@@ -24,7 +24,7 @@ public class GameController : MonoBehaviour
                 Instantiate(EnemyObj, spawnPosition, spawnRotation);
                 yield return new WaitForSeconds(1);
             }
-            yield return new WaitForSeconds(5);
+            yield return new WaitForSeconds(3);
         }
     }
 }

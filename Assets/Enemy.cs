@@ -3,10 +3,14 @@ using System.Collections;
 
 public class Enemy : MonoBehaviour {
 
+    public GameObject ExplosionObj;
+
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.tag == "Player")
+        if (other.tag == "Player" || other.tag == "PlayerBullet")
         {
+            var explosion = Instantiate(ExplosionObj, transform.position, transform.rotation);
+            Destroy(explosion, 3);
             Destroy(gameObject);
         }
     }
