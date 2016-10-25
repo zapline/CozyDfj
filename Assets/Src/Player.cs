@@ -58,7 +58,10 @@ public class Player : MonoBehaviour {
     {
         if (other.tag == "Enemy")
         {
-            print("瞬间爆炸");
+            GameController gameController = GameObject.FindObjectOfType<GameController>();
+            if (gameController != null)
+                gameController.GameOver();
+
             Destroy(gameObject);
         }
         else if (other.tag == "Friend")
