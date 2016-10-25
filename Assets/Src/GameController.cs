@@ -5,39 +5,26 @@ public class GameController : MonoBehaviour
 {
     public GameObject PlayerObj;
     public GameObject EnemyObj;
-    private enum eGameState
-    {
-        GAME_STATE_START_SCREEN,
-        GAME_STATE_PLAYING,
-        GAME_STATE_GAME_OVER
-    }
-    private eGameState m_state = eGameState.GAME_STATE_START_SCREEN;
-    private enum ePlayState
-    {
-        PLAY_STATE_STARTUP,
-        PLAY_STATE_WAVE,
-        PLAY_STATE_IN_BETWEEN_WAVES
-    }
-    private ePlayState m_playState = ePlayState.PLAY_STATE_STARTUP;
 
     void Start()
     {
-        CaptionManager.Instance.ShowTitle("按空格键开始游戏！", 100000);
+        CaptionManager.Instance.ShowTitle("王文撸大战设计模式", 100000);
+        CaptionManager.Instance.ShowSubtitle("按空格键开始游戏！", 100000);
     }
 
     void Update()
     {
-        switch (m_state)
+        switch (GameStateManager.Instance.GameState)
         {
             case eGameState.GAME_STATE_START_SCREEN:
                 if (Input.GetKeyDown(KeyCode.Space))
                 {
                     StartCoroutine("enemyGenerator");
-                    m_state = eGameState.GAME_STATE_PLAYING;
+                    GameStateManager.Instance.GameState = eGameState.GAME_STATE_PLAYING;
                 }
                 break;
             case eGameState.GAME_STATE_PLAYING:
-                switch (m_playState)
+                switch (GameStateManager.Instance.PlayState)
                 {
                     case ePlayState.PLAY_STATE_STARTUP:
                         break;
@@ -51,7 +38,7 @@ public class GameController : MonoBehaviour
                 if (Input.GetKeyDown(KeyCode.Space))
                 {
                     StartCoroutine("enemyGenerator");
-                    m_state = eGameState.GAME_STATE_PLAYING;
+                    GameStateManager.Instance.GameState = eGameState.GAME_STATE_PLAYING;
                 }
                 break;
         }
@@ -63,25 +50,66 @@ public class GameController : MonoBehaviour
         GameObject[] enemys = GameObject.FindGameObjectsWithTag("Enemy");
         foreach (var e in enemys)
             Destroy(e);
-        m_state = eGameState.GAME_STATE_GAME_OVER;
-        CaptionManager.Instance.ShowTitle("按空格键重新开始游戏！", 100000);
+        GameObject[] player = GameObject.FindGameObjectsWithTag("Player");
+        foreach (var e in player)
+            Destroy(e);
+        GameStateManager.Instance.GameState = eGameState.GAME_STATE_GAME_OVER;
+        CaptionManager.Instance.ShowSubtitle("按空格键重新开始游戏！", 100000);
     }
 
     IEnumerator enemyGenerator()
     {
         CaptionManager.Instance.ShowTitle("第一章");
         CaptionManager.Instance.ShowSubtitle("设计模式概述");
-        Instantiate(PlayerObj, new Vector2(0, -7), Quaternion.identity);
-
+        Instantiate(PlayerObj, new Vector2(0, -3), Quaternion.identity);
+ 
         yield return new WaitForSeconds(3.5f);
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 10; i++)
         {
             Vector2 spawnPosition = new Vector2(
                 Random.Range(-2.0f, 2.0f),
-                Random.Range(-2.0f, 2.0f));
+                Random.Range(-2.0f, 4.0f));
             Instantiate(EnemyObj, spawnPosition, Quaternion.identity);
             yield return new WaitForSeconds(1);
         }
-        yield return new WaitForSeconds(3);
+
+        yield return new WaitForSeconds(2);
+        CaptionManager.Instance.ShowTitle("设计模式从何而来?", 4);
+        CaptionManager.Instance.ShowSubtitle("Erich Gamma", 1);
+        yield return new WaitForSeconds(1);
+        CaptionManager.Instance.ShowSubtitle("Richard Helm", 1);
+        yield return new WaitForSeconds(1);
+        CaptionManager.Instance.ShowSubtitle("Ralph Johnson", 1);
+        yield return new WaitForSeconds(1);
+        CaptionManager.Instance.ShowSubtitle("John Vlissides", 1);
+
+        yield return new WaitForSeconds(1.5f);
+        for (int i = 0; i < 20; i++)
+        {
+            Vector2 spawnPosition = new Vector2(
+                Random.Range(-2.0f, 2.0f),
+                Random.Range(-2.0f, 4.0f));
+            Instantiate(EnemyObj, spawnPosition, Quaternion.identity);
+            yield return new WaitForSeconds(0.5f);
+        }
+
+        yield return new WaitForSeconds(2);
+        CaptionManager.Instance.ShowTitle("面向对象设计原则", 7);
+        CaptionManager.Instance.ShowSubtitle("单一职责原则", 1);
+        yield return new WaitForSeconds(1);
+        CaptionManager.Instance.ShowSubtitle("开放封闭原则", 1);
+        yield return new WaitForSeconds(1);
+        CaptionManager.Instance.ShowSubtitle("里氏代换原则", 1);
+        yield return new WaitForSeconds(1);
+        CaptionManager.Instance.ShowSubtitle("依赖倒转原则", 1);
+        yield return new WaitForSeconds(1);
+        CaptionManager.Instance.ShowSubtitle("接口隔离原则", 1);
+        yield return new WaitForSeconds(1);
+        CaptionManager.Instance.ShowSubtitle("合成复用原则", 1);
+        yield return new WaitForSeconds(1);
+        CaptionManager.Instance.ShowSubtitle("迪米特法则", 1);
+
+        yield return new WaitForSeconds(2);
+        GameOver();
     }
 }

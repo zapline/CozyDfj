@@ -7,6 +7,7 @@ public class Enemy : MonoBehaviour {
 
     void Start()
     {
+        GetComponent<Rigidbody2D>().velocity = transform.up * -3;
     }
 
     void OnTriggerEnter2D(Collider2D other)
