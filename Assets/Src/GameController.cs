@@ -4,10 +4,11 @@ using System.Collections;
 public class GameController : MonoBehaviour
 {
     public GameObject PlayerObj;
-    public GameObject EnemyObj;
+    GameObject EnemyObj;
 
     void Start()
     {
+        EnemyObj = DfjObject.Instance.EnemyObj;
         CaptionManager.Instance.ShowTitle("王文撸大战设计模式", 100000);
         CaptionManager.Instance.ShowSubtitle("按空格键开始游戏！", 100000);
     }
@@ -19,7 +20,7 @@ public class GameController : MonoBehaviour
             case eGameState.GAME_STATE_START_SCREEN:
                 if (Input.GetKeyDown(KeyCode.Space))
                 {
-                    StartCoroutine("enemyGenerator");
+                    StartCoroutine("level1");
                     GameStateManager.Instance.GameState = eGameState.GAME_STATE_PLAYING;
                 }
                 break;
@@ -37,7 +38,7 @@ public class GameController : MonoBehaviour
             case eGameState.GAME_STATE_GAME_OVER:
                 if (Input.GetKeyDown(KeyCode.Space))
                 {
-                    StartCoroutine("enemyGenerator");
+                    StartCoroutine("level1");
                     GameStateManager.Instance.GameState = eGameState.GAME_STATE_PLAYING;
                 }
                 break;
@@ -46,7 +47,7 @@ public class GameController : MonoBehaviour
 
     public void GameOver()
     {
-        StopCoroutine("enemyGenerator");
+        StopCoroutine("level1");
         GameObject[] enemys = GameObject.FindGameObjectsWithTag("Enemy");
         foreach (var e in enemys)
             Destroy(e);
@@ -57,7 +58,7 @@ public class GameController : MonoBehaviour
         CaptionManager.Instance.ShowSubtitle("按空格键重新开始游戏！", 100000);
     }
 
-    IEnumerator enemyGenerator()
+    IEnumerator level1()
     {
         CaptionManager.Instance.ShowTitle("第一章");
         CaptionManager.Instance.ShowSubtitle("设计模式概述");
@@ -69,7 +70,14 @@ public class GameController : MonoBehaviour
             Vector2 spawnPosition = new Vector2(
                 Random.Range(-2.0f, 2.0f),
                 Random.Range(-2.0f, 4.0f));
-            Instantiate(EnemyObj, spawnPosition, Quaternion.identity);
+            GameObject go = (GameObject)Instantiate(
+                EnemyObj,
+                spawnPosition,
+                Quaternion.identity);
+            go.tag = "Enemy";
+            go.AddComponent<DfjEnemy>();
+            var sr = go.AddComponent<SpriteRenderer>();
+            sr.sprite = Resources.Load<Sprite>("Graphics/enemyBlue");
             yield return new WaitForSeconds(1);
         }
 
@@ -89,7 +97,14 @@ public class GameController : MonoBehaviour
             Vector2 spawnPosition = new Vector2(
                 Random.Range(-2.0f, 2.0f),
                 Random.Range(-2.0f, 4.0f));
-            Instantiate(EnemyObj, spawnPosition, Quaternion.identity);
+            GameObject go = (GameObject)Instantiate(
+                EnemyObj,
+                spawnPosition,
+                Quaternion.identity);
+            go.tag = "Enemy";
+            go.AddComponent<DfjEnemy>();
+            var sr = go.AddComponent<SpriteRenderer>();
+            sr.sprite = Resources.Load<Sprite>("Graphics/enemyBlue");
             yield return new WaitForSeconds(0.5f);
         }
 

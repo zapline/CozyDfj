@@ -8,7 +8,7 @@ public class Boundary
 }
 
 public class Player : MonoBehaviour {
-    public float speed = 10;
+    public float speed = 5;
     public Boundary boundary;
     public GameObject shot1;
     public GameObject shot2;
@@ -45,7 +45,7 @@ public class Player : MonoBehaviour {
         Vector2 movement = new Vector2(moveHorizontal, moveVertical);
         float s = speed;
         if (Input.GetKey(KeyCode.LeftShift))
-            s /= 5;
+            s /= 3;
         GetComponent<Rigidbody2D>().velocity = movement * s;
         GetComponent<Rigidbody2D>().position = new Vector2
             (
